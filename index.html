@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="description" content="Etch-a-Sketch">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="keywords" content="Etch-a-Sketch, TOP, The Odin Project">
+  <meta name="author" content="mwindz">
+
+  <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+  <h1>Etch-A-Sketch</h1>
+
+  <p>Wiggle your mouse around to change cell colour.  Reset or change
+     grid size below.</p>
+
+  <div><input id="gridSize" value="16"><button id="btnGridSize">Re/Set Grid Size</button></div>
+
+  <div id="container">
+    <div class="divxel"></div>
+  </div>
+
+<script>
+    
+  const hexConversion = 255;
+
+  const container = document.querySelector("#container");
+  const btnGridSize = document.querySelector("#btnGridSize");
+  const inpGridSize = document.querySelector("#gridSize");
+  const divxel = document.querySelector(".divxel");
+
+  let nGridSize = 16 
+
+
+  function drawCells(nGridSize) {
+
+    while (container.firstChild) {
+      container.removeChild(container.lastChild);
+    }
+
+    for (let i = 0; i < nGridSize; i++) {
+
+      for (let j = 0; j < nGridSize; j++) {
+
+        const cell = document.createElement("div");
+
+        cell.classList.add("divxel");
+
+        cell.style.minWidth = String((960 - (2 * nGridSize)) / nGridSize) + "px";
+        cell.style.minHeight = String((960 - (2 * nGridSize)) / nGridSize) + "px";
+
+        container.appendChild(cell);
+
+        cell.addEventListener("mouseover", function () { colorize(this) });
+
+      }
+
+    }
+
+  }
+
+
+  function colorize(cell) {
+    
+    let sRandomColor = "#";
+
+    for (let i = 0; i < 3; i ++) {  // change i ceiling to 4 to get transparency if you want it
+      const fRandomNumber = Math.round(Math.random() * hexConversion);
+
+      if (String(fRandomNumber.toString(16)).length < 2) {
+        sRandomColor += "0" + String(fRandomNumber.toString(16));
+
+      } else {
+        sRandomColor += String(fRandomNumber.toString(16));
+
+      }
+    }
+    
+    cell.style.backgroundColor = sRandomColor;
+    cell.style.opacity = String(Number(cell.style.opacity) + 0.1);
+  
+  }
+
+
+  btnGridSize.addEventListener("mousedown", function () {
+
+    if (inpGridSize.value > 100) {
+      drawCells(100);
+      inpGridSize.textContent = 100;
+
+    } else {
+      drawCells(inpGridSize.value);
+
+    }
+
+  });
+  
+  drawCells(nGridSize);
+
+  </script>
+
+</body>
+
+
+
+</html>
